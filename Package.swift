@@ -4,6 +4,9 @@ import PackageDescription
 
 let package = Package(
     name: "LuaKit",
+    platforms: [
+        .macOS(.v12)
+    ],
     products: [
         .library(
             name: "LuaKit",
@@ -13,14 +16,15 @@ let package = Package(
     targets: [
         .systemLibrary(
             name: "liblua",
-            pkgConfig: "liblua",
+            pkgConfig: "lua",
             providers: [
                 .brewItem(["lua"])
             ]
         ),
         .target(
             name: "LuaKit",
-            dependencies: ["liblua"]),
+            dependencies: ["liblua"]
+        ),
         .testTarget(
             name: "LuaKitTests",
             dependencies: ["LuaKit"]),

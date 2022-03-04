@@ -1,5 +1,5 @@
 module liblua [system] {
-    header "Bridging-Header-liblua.h"
+    header "liblua.h"
     link "lua"
     export *
 }
