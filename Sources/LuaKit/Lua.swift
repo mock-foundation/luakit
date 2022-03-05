@@ -18,7 +18,7 @@ public class Lua {
     
     public init() {
         L = luaL_newstate()
-        
+        luaL_openlibs(L)
     }
     
     // MARK: - Public methods
@@ -70,7 +70,24 @@ public class Lua {
     ///   - name: Name assigned to this exact piece of code.
     public func run(code: String, name: String) throws {
         try loadCode(code, name: name)
-        lua_pcallk(L, 0, 0, 0, 0, nil)
+        try executeCode(args: 0, results: 0, errfunc: 0, context: 0)
+    }
+    
+    /// Executes code specified in parameters.. Use this function **ONLY** if you know what are you doing.
+    /// - Parameters:
+    ///   - args: idk
+    ///   - results: idk
+    ///   - errfunc: idk
+    ///   - context: some context idk
+    public func executeCode(args: Int32, results: Int32, errfunc: Int32, context: Int) throws {
+        if lua_pcallk(L, args, results, errfunc, context, nil) != 0 {
+            if let message = lua_tolstring(L, -1, nil) {
+                let messageString = String(cString: message, encoding: .utf8) ?? "Unknown"
+                throw RuntimeError(message: messageString)
+            } else {
+                throw RuntimeError(message: "Unknown")
+            }
+        }
     }
     
     /// Loads code into memory. Use this function **ONLY** if you know what are you doing.

@@ -29,9 +29,8 @@ function fact (n)
       end
     end
     
-    print("enter a number:")
-    a = io.read("*number")        -- read a number
-    print(fact(a))
+    print("Using number 5:")
+    print(fact(5))
 """, name: "someCode")
     }
 }
