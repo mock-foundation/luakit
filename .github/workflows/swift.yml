@@ -11,11 +11,15 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Install lua
+      run: brew install lua
     - name: Build
       run: swift build -v
   test:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Install lua
+      run: brew install lua
     - name: Run tests
       run: swift test -v
