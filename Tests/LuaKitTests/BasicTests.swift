@@ -10,7 +10,7 @@ import XCTest
 
 final class BasicTests: XCTestCase {
     func testInit() throws {
-        let l = Lua()
+        _ = Lua()
     }
     
     func testCodeLoading() throws {
@@ -22,15 +22,15 @@ final class BasicTests: XCTestCase {
         let l = Lua()
         try l.run(code: """
 function fact (n)
-      if n == 0 then
-        return 1
-      else
-        return n * fact(n-1)
-      end
-    end
-    
-    print("Using number 5:")
-    print(fact(5))
+  if n == 0 then
+    return 1
+  else
+    return n * fact(n-1)
+  end
+end
+
+print("Using number 5:")
+print(fact(5))
 """, name: "someCode")
     }
 }

@@ -58,12 +58,6 @@ public class Lua {
         }
     }
     
-    /// Just an equivalent of `lua_pop`, because actually `lua_pop`
-    /// is a macro, and Swift doesn't like function macros.
-    private func luaPop(idx: Int32) {
-        lua_settop(L, -(idx)-1)
-    }
-    
     /// Runs code. Wow.
     /// - Parameters:
     ///   - code: Code to run.
@@ -73,20 +67,15 @@ public class Lua {
         try executeCode(args: 0, results: 0, errfunc: 0, context: 0)
     }
     
-    /// Executes code specified in parameters.. Use this function **ONLY** if you know what are you doing.
+    /// Executes code specified in parameters.
     /// - Parameters:
     ///   - args: idk
     ///   - results: idk
     ///   - errfunc: idk
     ///   - context: some context idk
-    public func executeCode(args: Int32, results: Int32, errfunc: Int32, context: Int) throws {
+    func executeCode(args: Int32, results: Int32, errfunc: Int32, context: Int) throws {
         if lua_pcallk(L, args, results, errfunc, context, nil) != 0 {
-            if let message = lua_tolstring(L, -1, nil) {
-                let messageString = String(cString: message, encoding: .utf8) ?? "Unknown"
-                throw RuntimeError(message: messageString)
-            } else {
-                throw RuntimeError(message: "Unknown")
-            }
+            throw RuntimeError(message: getLastErrorMessageFromStack())
         }
     }
     
@@ -94,16 +83,44 @@ public class Lua {
     /// - Parameters:
     ///   - code: Code to load.
     ///   - name: Name assigned to this exact piece of code.
-    public func loadCode(_ code: String, name: String) throws {
+    func loadCode(_ code: String, name: String) throws {
         let result = luaL_loadbufferx(L, code, code.utf8.count, name, nil)
         guard result == 0 else {
-            if let message = lua_tolstring(L, -1, nil) {
-                let messageString = String(cString: message, encoding: .utf8) ?? "Unknown"
-                throw CompilationError(message: messageString)
+            throw CompilationError(message: getLastErrorMessageFromStack())
+        }
+    }
+    
+    public func insertToStack(_ string: String) {
+        
+    }
+    
+    func getLastErrorMessageFromStack() -> String {
+        let valueFromStack = lua_tolstring(L, -1, nil)
+        var stringMessage: String {
+            if valueFromStack == nil {
+                return "Unknown"
             } else {
-                throw CompilationError(message: "Unknown")
+                return String(cString: valueFromStack!)
             }
         }
+        return stringMessage
+    }
+    
+    public func registerFunction(_ function: @escaping lua_CFunction, name: String) {
+        lua_pushcfunction(L, function)
+        lua_setglobal(L, name)
+    }
+    
+    public func getStringFromStack(at location: Int32) throws -> String {
+        let valueFromStack = lua_tolstring(L, location, nil)
+        var stringMessage: String {
+            if valueFromStack == nil {
+                return "Unknown"
+            } else {
+                return String(cString: valueFromStack!)
+            }
+        }
+        return stringMessage
     }
     
     deinit {
