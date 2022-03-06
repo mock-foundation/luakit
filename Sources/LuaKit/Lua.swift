@@ -11,9 +11,9 @@ public class Lua {
     
     /// Opens a Lua instance.
     /// - Parameter libs: Libs to open with Lua.
-    public init(libs: [LuaLibrary]) {
+    public init(libs: [StandartLibrary]) {
         L = luaL_newstate()
-        openLibs(libs)
+        openStdLibs(libs)
     }
     
     public init() {
@@ -23,17 +23,17 @@ public class Lua {
     
     // MARK: - Public methods
     
-    /// Opens libraries specified in `libs` parameter.
+    /// Opens standart libraries specified in `libs` parameter.
     /// - Parameter libs: Libraries to load.
-    public func openLibs(_ libs: [LuaLibrary]) {
+    public func openStdLibs(_ libs: [StandartLibrary]) {
         for lib in libs {
-            openLib(lib)
+            openStdLib(lib)
         }
     }
     
-    /// Opens a library specified in `lib` parameter.
+    /// Opens a standart library specified in `lib` parameter.
     /// - Parameter lib: A library to load.
-    public func openLib(_ lib: LuaLibrary) {
+    public func openStdLib(_ lib: StandartLibrary) {
         switch lib {
             case .base:
                 luaopen_base(L)
