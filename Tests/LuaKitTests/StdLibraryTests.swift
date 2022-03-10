@@ -10,6 +10,7 @@ import XCTest
 
 final class StdLibraryTests: XCTestCase {
     func testDefaultSet() throws {
-        _ = Lua()
+        let l = Lua(includeStd: true)
+        try l.run(code: "print(math.abs(10))", name: "code")
     }
 }

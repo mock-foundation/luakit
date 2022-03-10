@@ -19,7 +19,7 @@ final class BasicTests: XCTestCase {
     }
     
     func testCodeRunning() throws {
-        let l = Lua()
+        let l = Lua(includeStd: true)
         try l.run(code: """
 function fact (n)
   if n == 0 then
