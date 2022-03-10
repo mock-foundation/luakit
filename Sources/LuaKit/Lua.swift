@@ -2,24 +2,50 @@ import liblua
 import Foundation
 
 /// A class that represents a Lua instance.
-public class Lua {
+final public class Lua {
     /// The `L` name was chosen because it is the same name used in
     /// Lua documentation examples.
     var L: OpaquePointer?
     
     // MARK: - Initializers
     
-    /// Opens a Lua instance.
+    /// Opens a Lua instance with provided standart libraries.
     /// - Parameter libs: Libs to open with Lua.
     public init(libs: [StandartLibrary]) {
         L = luaL_newstate()
         openStdLibs(libs)
     }
     
+    /// Open a new Lua instance with no standart libraries.
     public init() {
         L = luaL_newstate()
-        luaL_openlibs(L)
     }
+    
+    /// Open a new Lua instance with a kit of standart
+    /// libraries (if instructed to using `includeStd` argument).
+    /// 
+    /// Here is a list of standart libraries that will be opened:
+    /// - Base
+    /// - OS
+    /// - I/O
+    /// - Table
+    /// - Coroutine
+    /// - String
+    /// - UTF8
+    /// - Math
+    /// - Debug
+    /// - Package
+    /// - Parameter includeStd: Whether to include standart libraries
+    /// from the above list or not. If you specify false, then, well, just use
+    /// ``init()``, it will be easier for you and everybody else 🤷
+    public init(includeStd: Bool = false) {
+        L = luaL_newstate()
+        
+        if includeStd {
+            luaL_openlibs(L)
+        }
+    }
+    
     
     // MARK: - Public methods
     
