@@ -148,7 +148,7 @@ final public class Lua {
             case LUA_ERRRUN:
                 throw RuntimeError(message: getLastErrorMessageFromStack())
             case LUA_ERRMEM:
-                throw MemoryError()
+                throw LuaError.memoryAllocation
             default: break
         }
     }
