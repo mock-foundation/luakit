@@ -118,13 +118,13 @@ final public class Lua {
         }
     }
     
-    /// Registers a function to be used in Lua. For more documentation look at <doc:Function-import-and-export> article.
+    /// Registers a function to be used in Lua. An equivalent of `lua_register`.
+    /// For more documentation look at <doc:Function-import-and-export> article.
     /// - Parameters:
     ///   - function: A function to be passed. Note that it should be a C function (exported to C as `@_cdecl`).
     ///   - name: How this function should be named in Lua.
     public func registerFunction(_ function: @escaping lua_CFunction, name: String) {
-        lua_pushcfunction(L, function)
-        lua_setglobal(L, name)
+        lua_register(L, name, function)
     }
     
     // MARK: - Stack manipulation
