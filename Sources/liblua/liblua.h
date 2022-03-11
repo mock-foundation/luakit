@@ -46,6 +46,7 @@
 #define luakit_insert(L,idx) lua_insert(L,idx)
 #define luakit_remove(L,idx) lua_remove(L,idx)
 #define luakit_replace(L,idx) lua_replace(L,idx)
+#define luakit_call(L,n,r) lua_call(L,n,r)
 
 #undef lua_getextraspace(L)
 #undef lua_tonumber(L,i)
@@ -68,6 +69,7 @@
 #undef lua_insert(L,idx)
 #undef lua_remove(L,idx)
 #undef lua_replace(L,idx)
+#undef lua_call(L,n,r)
 
 // lauxlib.h
 #define luakitL_newlibtable(L,l) luaL_newlibtable(L,l)
@@ -183,6 +185,10 @@ void lua_replace(lua_State *L, int index) {
     luakit_replace(L, index);
 }
 
+void lua_call(lua_State *L, int nargs, int nresults) {
+    luakit_call(L, nargs, nresults);
+}
+
 /*
  lauxlib.h
  */
@@ -266,6 +272,7 @@ int luaL_loadbuffer(lua_State *L,
 #undef luakit_insert(L,idx)
 #undef luakit_remove(L,idx)
 #undef luakit_replace(L,idx)
+#undef luakit_call(L,n,r)
 
 /*
  lauxlib.h

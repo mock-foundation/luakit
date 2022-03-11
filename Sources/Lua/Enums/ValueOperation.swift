@@ -1,11 +1,11 @@
 //
-//  Operation.swift
+//  ValueOperation.swift
 //  
 //
 //  Created by Егор Яковенко on 11.03.2022.
 //
 
-public enum Operation: Int32 {
+public enum ValueOperation: Int32 {
     case addition = 0
     case subtraction = 1
     case multiplication = 2
