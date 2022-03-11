@@ -10,7 +10,7 @@ let package = Package(
     products: [
         .library(
             name: "LuaKit",
-            targets: ["LuaKit"]),
+            targets: ["LuaKit", "Lua"]),
     ],
     dependencies: [],
     targets: [
@@ -22,8 +22,12 @@ let package = Package(
             ]
         ),
         .target(
-            name: "LuaKit",
+            name: "Lua",
             dependencies: ["liblua"]
+        ),
+        .target(
+            name: "LuaKit",
+            dependencies: ["liblua", "Lua"]
         ),
         .testTarget(
             name: "LuaKitTests",
