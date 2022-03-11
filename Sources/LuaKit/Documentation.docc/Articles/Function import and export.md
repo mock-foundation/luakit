@@ -55,5 +55,6 @@ note that index count **starts from 1**. Ples don't bully me, this is the
 Lua developer that made me to do this 💀
 
 - The return value is Int32, and is not returning a status code or something,
-no, it is actually **a number of return values**. TODO: finish this section
+no, it is actually **a number of return values**. You can use it
+non-directly though, by just using a helper function 
 
