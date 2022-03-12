@@ -28,25 +28,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install lua
+    - name: Build and install lua
       run: |
-        sudo apt update
-        sudo apt install software-properties-common
-        sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu impish universe'
-        sudo apt update
-        sudo apt install liblua5.4-dev
+        curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
+        tar zxf lua-5.4.4.tar.gz
+        cd lua-5.4.4
+        make linux install
     - name: Build
       run: swift build
   test-ubuntu:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install lua
+    - name: Build and install lua
       run: |
-        sudo apt update
-        sudo apt install software-properties-common
-        sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu impish universe'
-        sudo apt update
-        sudo apt install liblua5.4-dev
+        curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
+        tar zxf lua-5.4.4.tar.gz
+        cd lua-5.4.4
+        make linux install
     - name: Run tests
       run: swift test
