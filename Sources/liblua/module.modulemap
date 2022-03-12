@@ -1,4 +1,10 @@
-module liblua [system] {
+module liblua_macOS [system] {
+    header "liblua.h"
+    link "lua"
+    export *
+}
+
+module liblua_linux [system] {
     header "liblua.h"
     link "lua"
     export *

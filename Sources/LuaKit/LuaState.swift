@@ -5,7 +5,11 @@
 //  Created by Егор Яковенко on 11.03.2022.
 //
 
-import liblua
+#if os(macOS)
+import liblua_macOS
+#elseif os(Linux)
+import liblua_linux
+#endif
 
 public class LuaState {
     /// The `L` name was chosen because it is the same name used in

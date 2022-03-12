@@ -1,5 +1,10 @@
 import Foundation
-import liblua
+
+#if os(macOS)
+import liblua_macOS
+#elseif os(Linux)
+import liblua_linux
+#endif
 
 /// A class that represents a Lua instance.
 final public class Lua {

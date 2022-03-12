@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build-macOS:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
@@ -15,11 +15,38 @@ jobs:
       run: brew install lua
     - name: Build
       run: swift build
-  test:
+  test-macOS:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
     - name: Install lua
       run: brew install lua
+    - name: Run tests
+      run: swift test
+      
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install lua
+      run: |
+        sudo apt update
+        sudo apt install software-properties-common
+        sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu impish universe'
+        sudo apt update
+        sudo apt install liblua5.4-dev
+    - name: Build
+      run: swift build
+  test-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install lua
+      run: |
+        sudo apt update
+        sudo apt install software-properties-common
+        sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu impish universe'
+        sudo apt update
+        sudo apt install liblua5.4-dev
     - name: Run tests
       run: swift test

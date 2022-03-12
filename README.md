@@ -10,3 +10,8 @@ and click `Product -> Build Documentation` from the menubar, or
 successful build. If you accidentally closed it - no worries!
 Just click `Help -> Developer Documentation` from the menubar,
 or `⇧⌘0` (that's a zero) as a shortcut.
+
+## Platform support
+
+This project supports macOS and Linux, with other platforms like
+iOS, watchOS, and tvOS coming soon.
