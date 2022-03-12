@@ -34,6 +34,7 @@ jobs:
         tar zxf lua-5.4.4.tar.gz
         cd lua-5.4.4
         sudo make linux install
+        sudo make test
     - name: Build
       run: swift build
   test-ubuntu:
@@ -46,5 +47,6 @@ jobs:
         tar zxf lua-5.4.4.tar.gz
         cd lua-5.4.4
         sudo make linux install
+        sudo make test
     - name: Run tests
       run: swift test
