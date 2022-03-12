@@ -14,7 +14,7 @@ jobs:
     - name: Install lua
       run: brew install lua
     - name: Build
-      run: swift build -v
+      run: swift build
   test:
     runs-on: macos-latest
     steps:
@@ -22,4 +22,4 @@ jobs:
     - name: Install lua
       run: brew install lua
     - name: Run tests
-      run: swift test -v
+      run: swift test
