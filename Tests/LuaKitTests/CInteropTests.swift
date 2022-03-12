@@ -23,14 +23,14 @@ func secondTestCFunc(args: OpaquePointer?) -> Int32 {
 final class CInteropTests: XCTestCase {
     func testCFunctionLoadAndRun() throws {
         let l = Lua(includeStd: true)
-        l.registerFunction(testCFunc, name: "test_c_func")
+        l.register(function: testCFunc, name: "test_c_func")
         try l.run(code: "print(\"A print from Lua...\") \n test_c_func()", name: "code")
     }
     
     func testMultipleCFunctionsLoadAndRun() throws {
         let l = Lua(includeStd: true)
-        l.registerFunction(testCFunc(args:), name: "test_c_func")
-        l.registerFunction(secondTestCFunc(args:), name: "second_test_c_func")
+        l.register(function: testCFunc(args:), name: "test_c_func")
+        l.register(function: secondTestCFunc(args:), name: "second_test_c_func")
         try l.run(code: "print(\"A print from Lua...\") \n test_c_func() \n second_test_c_func()", name: "code")
     }
 }

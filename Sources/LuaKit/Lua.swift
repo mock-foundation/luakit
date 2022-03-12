@@ -1,22 +1,22 @@
 import Foundation
-import Lua
+import liblua
 
 /// A class that represents a Lua instance.
 final public class Lua {
-    var L: LuaState
+    var lua: LuaState
     
     // MARK: - Initializers
     
     /// Opens a Lua instance with provided standart libraries.
     /// - Parameter libs: Libs to open with Lua.
     public init(libs: [StandartLibrary]) {
-        L = LuaState()
+        lua = LuaState()
         openStdLibs(libs)
     }
     
     /// Open a new Lua instance with no standart libraries.
     public init() {
-        L = LuaState()
+        lua = LuaState()
     }
     
     /// Open a new Lua instance with a kit of standart
@@ -37,10 +37,10 @@ final public class Lua {
     /// from the above list or not. If you specify false, then, well, just use
     /// ``init()``, it will be easier for you and everybody else 🤷
     public init(includeStd: Bool = false) {
-        L = LuaState()
+        lua = LuaState()
         
         if includeStd {
-//            luaL_openlibs(L)
+            lua.openLibs()
         }
     }
     
@@ -58,28 +58,28 @@ final public class Lua {
     /// Opens a standart library specified in `lib` parameter.
     /// - Parameter lib: A library to load.
     public func openStdLib(_ lib: StandartLibrary) {
-//        switch lib {
-//            case .base:
-//                luaopen_base(L)
-//            case .table:
-//                luaopen_table(L)
-//            case .io:
-//                luaopen_io(L)
-//            case .string:
-//                luaopen_string(L)
-//            case .math:
-//                luaopen_math(L)
-//            case .os:
-//                luaopen_os(L)
-//            case .utf8:
-//                luaopen_utf8(L)
-//            case .debug:
-//                luaopen_debug(L)
-//            case .package:
-//                luaopen_package(L)
-//            case .coroutine:
-//                luaopen_coroutine(L)
-//        }
+        switch lib {
+            case .base:
+                lua.openBase()
+            case .table:
+                lua.openTable()
+            case .io:
+                lua.openIO()
+            case .string:
+                lua.openString()
+            case .math:
+                lua.openMath()
+            case .os:
+                lua.openOS()
+            case .utf8:
+                lua.openUTF8()
+            case .debug:
+                lua.openDebug()
+            case .package:
+                lua.openPackage()
+            case .coroutine:
+                lua.openCoroutine()
+        }
     }
     
     // MARK: - Code interactions
@@ -95,13 +95,10 @@ final public class Lua {
     
     /// Executes code specified in parameters.
     /// - Parameters:
-    ///   - argCount: idk
-    ///   - resultCount: idk
+    ///   - argCount: Amount of args that were pushed onto the stack.
+    ///   - resultCount: Amount of results.
     func executeCode(argCount: Int32, resultCount: Int32) throws {
-        L.call(argCount: argCount, resultCount: resultCount)
-//        if lua_pcallk(L, args, results, errfunc, context, nil) != 0 {
-//            throw RuntimeError(message: getLastErrorMessageFromStack())
-//        }
+        lua.call(argCount: argCount, resultCount: resultCount)
     }
     
     /// Loads code into memory.
@@ -109,7 +106,7 @@ final public class Lua {
     ///   - code: Code to load.
     ///   - name: Name assigned to this exact piece of code.
     public func loadCode(_ code: String, name: String) throws {
-//        let result = luaL_loadbufferx(L, code, code.utf8.count, name, nil)
+        let result = lua.loadBuffer(code, name: name)
 //        guard result == 0 else {
 //            throw SyntaxError(message: getLastErrorMessageFromStack())
 //        }
@@ -120,80 +117,42 @@ final public class Lua {
     /// - Parameters:
     ///   - function: A function to be passed. Note that it should be a C function (exported to C as `@_cdecl`).
     ///   - name: How this function should be named in Lua.
-    public func registerFunction(_ function: @escaping CFunction, name: String) {
-//        lua_register(L, name, function)
+    public func register(function: @escaping CFunction, name: String) {
+        lua.register(name: name, function: function)
     }
     
     // MARK: - Stack manipulation
     
     func getLastErrorMessageFromStack() -> String {
-//        let valueFromStack = lua_tolstring(L, -1, nil)
-//        var stringMessage: String {
-//            if valueFromStack == nil {
-//                return "Unknown"
-//            } else {
-//                return String(cString: valueFromStack!)
-//            }
-//        }
-//        return stringMessage
-        return "Unknown"
-    }
-    
-    func errorCodeHandler(_ code: Int32) throws {
-//        switch code {
-//            case LUA_ERRSYNTAX:
-//                throw SyntaxError(message: getLastErrorMessageFromStack())
-//            case LUA_ERRRUN:
-//                throw RuntimeError(message: getLastErrorMessageFromStack())
-//            case LUA_ERRMEM:
-//                throw LuaError.memoryAllocation
-//            default: break
-//        }
+        return lua.toString(index: -1) ?? "Unknown"
     }
     
     /// Pushes a `String` to the stack
     /// - Parameter string: A string to be pushed, nothin' strange here
-    public func pushToStack(_ string: String?) {
-//        lua_pushstring(L, string)
+    public func pushToStack(string: String) {
+        lua.push(string: string)
     }
     
     /// Pushes a `Double` value to the stack
     /// - Parameter double: A Double to pushed, nothing suprizing
-    public func pushToStack(_ double: Double?) {
-//        if let double = double {
-//            lua_pushnumber(L, double)
-//        } else {
-//            lua_pushnil(L)
-//        }
+    public func pushToStack(double: Double) {
+        lua.push(double: double)
     }
     
     /// Pushes a boolean value to the stack
     /// - Parameter bool: Well, a boolean to be pushed
-    public func pushToStack(_ bool: Bool?) {
-//        if let bool = bool {
-//            lua_pushboolean(L, bool ? 1 : 0)
-//        } else {
-//            lua_pushnil(L)
-//        }
+    public func pushToStack(bool: Bool) {
+        lua.push(bool: bool)
     }
     
-    /// Pushes a nil value to the stack, because, well, no arguments
+    /// Pushes a `nil` value to the stack, because, well, no arguments
     /// were specified here.
     public func pushToStack() {
-//        lua_pushnil(L)
+        lua.pushNil()
     }
     
-    public func getStringFromStack(at location: Int32) throws -> String {
-//        let valueFromStack = lua_tolstring(L, location, nil)
-//        var stringMessage: String {
-//            if valueFromStack == nil {
-//                return "Unknown"
-//            } else {
-//                return String(cString: valueFromStack!)
-//            }
-//        }
-//        return stringMessage
-        return "Unknown"
+    public func getStringFromStack(at index: Int32) throws -> String? {
+        return lua.toString(index: index)
     }
     
     // MARK: - Static methods
@@ -207,8 +166,7 @@ final public class Lua {
     ///   Please don't bully me, this is the Lua developer, it is him that did this
     /// - Returns: The wanted `Double` arg.
     public static func getArgAsDouble(args: OpaquePointer, index: Int32) -> Double {
-//        return luaL_checknumber(args, index)
-        return 0
+        return luaL_checknumber(args, index)
     }
     
     /// A helper function for functions that are exported into Lua. Returns a `String` value from
@@ -219,7 +177,6 @@ final public class Lua {
     ///   Please don't bully me, this is the Lua developer, it is him that did this
     /// - Returns: The wanted `String` arg
     public static func getArgAsString(args: OpaquePointer, index: Int32) -> String {
-//        return String(cString: luaL_checkstring(args, index))
-        return "Unknown"
+        return String(cString: luaL_checkstring(args, index))
     }
 }
