@@ -23,7 +23,10 @@ let package = Package(
         ),
         .target(
             name: "LuaKit",
-            dependencies: ["liblua"]
+            dependencies: ["liblua"],
+            swiftSettings: [
+                .unsafeFlags(["-Xfrontend", "-validate-tbd-against-ir=none"])
+            ]
         ),
         .testTarget(
             name: "LuaKitTests",
