@@ -96,7 +96,6 @@ final public class Lua {
     public func run(code: String, name: String) throws {
         try loadCode(code, name: name)
         try executeCode(argCount: 0, resultCount: 0)
-        lua.pop(at: 1)
     }
     
     /// Executes code specified in parameters.
