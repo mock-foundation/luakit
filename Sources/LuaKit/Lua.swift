@@ -96,6 +96,7 @@ final public class Lua {
     public func run(code: String, name: String) throws {
         try loadCode(code, name: name)
         try executeCode(argCount: 0, resultCount: 0)
+        lua.pop(at: 1)
     }
     
     /// Executes code specified in parameters.
@@ -103,7 +104,9 @@ final public class Lua {
     ///   - argCount: Amount of args that were pushed onto the stack.
     ///   - resultCount: Amount of results.
     func executeCode(argCount: Int32, resultCount: Int32) throws {
-        lua.call(argCount: argCount, resultCount: resultCount)
+//        luakit_pcall(lua.L, 0, 0, 0)
+        print("executing")
+        try lua.protectedCall(argCount: argCount, resultCount: resultCount)
     }
     
     /// Loads code into memory.
@@ -182,6 +185,6 @@ final public class Lua {
     ///   Please don't bully me, this is the Lua developer, it is him that did this
     /// - Returns: The wanted `String` arg
     public static func getArgAsString(args: OpaquePointer, index: Int32) -> String {
-        return String(cString: luaL_checkstring(args, index))
+        return String(cString: luakitL_checkstring(args, index))
     }
 }

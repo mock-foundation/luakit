@@ -95,8 +95,17 @@ public class LuaState {
     ///   - resultCount: Amount of results.
     ///   - multipleResults: Whether to return all results or not. If `true`,
     ///   then `resultCount` is ignored.
-    public func call(argCount: Int32, resultCount: Int32 = 1, multipleResults: Bool = false) {
-        lua_call(L, argCount, resultCount)
+    public func call(argCount: Int32, resultCount: Int32 = 1, multipleResults: Bool = false) throws {
+        luakit_call(L, argCount, multipleResults ? LUA_MULTRET : resultCount)
+    }
+    
+    public func protectedCall(argCount: Int32, resultCount: Int32 = 1, multipleResults: Bool = false, messageHandlerIndex: Int32 = 0) throws {
+        let result = luakit_pcall(L, argCount, multipleResults ? LUA_MULTRET : resultCount, messageHandlerIndex)
+        
+        print(result)
+        if result != 0 {
+            throw LuaError(rawValue: Int(result))!
+        }
     }
     
     /// This function behaves exactly like ``LuaState/call(argCount:resultCount:multipleResults:)``,
@@ -207,7 +216,7 @@ public class LuaState {
     }
     
     public func getExtraSpace() {
-        lua_getextraspace(L)
+        luakit_getextraspace(L)
     }
     
     @available(*, deprecated, message: """
@@ -216,19 +225,19 @@ used in Lua C API, but with name toNumber it does not seem
 have a difference against toInt, so use please toDouble
 """, renamed: "toDouble")
     public func toNumber(index: Int32) -> Double {
-        return lua_tonumber(L, index)
+        return luakit_tonumber(L, index)
     }
     
     public func toDouble(index: Int32) -> Double {
-        return lua_tonumber(L, index)
+        return luakit_tonumber(L, index)
     }
     
     public func toInt(index: Int32) -> Int64 {
-        return lua_tointeger(L, index)
+        return luakit_tointeger(L, index)
     }
     
     public func toString(index: Int32) -> String? {
-        if let luaString = lua_tostring(L, index) {
+        if let luaString = luakit_tostring(L, index) {
             return String(cString: luaString)
         } else {
             return nil
@@ -236,31 +245,31 @@ have a difference against toInt, so use please toDouble
     }
     
     public func pop(at index: Int32) {
-        lua_pop(L, index)
+        luakit_pop(L, index)
     }
     
     public func newTable() {
-        lua_newtable(L)
+        luakit_newtable(L)
     }
     
     public func register(name: String, function: @escaping CFunction) {
-        lua_register(L, name, function)
+        luakit_register(L, name, function)
     }
     
     public func pushCFunction(function: @escaping CFunction) {
-        lua_pushcfunction(L, function)
+        luakit_pushcfunction(L, function)
     }
     
     public func isFunction(at index: Int32) -> Bool {
-        return lua_isfunction(L, index) != 0
+        return luakit_isfunction(L, index) != 0
     }
     
     public func isTable(at index: Int32) -> Bool {
-        return lua_istable(L, index) != 0
+        return luakit_istable(L, index) != 0
     }
     
     public func isLightUserData(at index: Int32) -> Bool {
-        return lua_islightuserdata(L, index) != 0
+        return luakit_islightuserdata(L, index) != 0
     }
     
     public func pushNil() {
@@ -324,11 +333,11 @@ have a difference against toInt, so use please toDouble
     }
     
     public func loadBuffer(_ buffer: String, name: String) {
-        luaL_loadbuffer(L, buffer, buffer.utf8.count, name)
+        luakitL_loadbuffer(L, buffer, buffer.utf8.count, name)
     }
     
     public func loadBuffer(_ buffer: String, size: Int, name: String) {
-        luaL_loadbuffer(L, buffer, size, name)
+        luakitL_loadbuffer(L, buffer, size, name)
     }
     
     deinit {
