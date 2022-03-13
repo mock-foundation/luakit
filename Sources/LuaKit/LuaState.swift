@@ -170,7 +170,9 @@ public class LuaState {
     /// **DOES NOT WORK ON LINUX**
     /// - Parameter index: Slot index that should be closed.
     public func closesSlot(at index: Int32) {
+        #if !os(Linux)
         lua_closeslot(L, index)
+        #endif
     }
     
     /// Compares two Lua values. Returns `true` if the value at index `firstIndex` satisfies
