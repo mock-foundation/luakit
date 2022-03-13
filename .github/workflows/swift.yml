@@ -30,14 +30,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install lua
       run: |
-        deb http://no.archive.ubuntu.com/ubuntu/ impish universe
-        sudo apt update
-        sudo apt install liblua5.4-dev
-        curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
-        tar zxf lua-5.4.4.tar.gz
-        cd lua-5.4.4
-        sudo make linux install
-        sudo make test
+        curl -o liblua.deb http://ftp.de.debian.org/debian/pool/main/l/lua5.4/liblua5.4-0_5.4.4-1_amd64.deb
+        curl -o liblua-dev.deb http://ftp.de.debian.org/debian/pool/main/l/lua5.4/liblua5.4-dev_5.4.4-1_amd64.deb
+        sudo dpkg -i liblua.deb
+        sudo dpkg -i liblua-dev.deb
         pkg-config --libs lua
     - name: Build
       run: swift build
@@ -47,14 +43,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install lua
       run: |
-        deb http://no.archive.ubuntu.com/ubuntu/ impish universe
-        sudo apt update
-        sudo apt install liblua5.4-dev
-        curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
-        tar zxf lua-5.4.4.tar.gz
-        cd lua-5.4.4
-        sudo make linux install
-        sudo make test
+        curl -o liblua.deb http://ftp.de.debian.org/debian/pool/main/l/lua5.4/liblua5.4-0_5.4.4-1_amd64.deb
+        curl -o liblua-dev.deb http://ftp.de.debian.org/debian/pool/main/l/lua5.4/liblua5.4-dev_5.4.4-1_amd64.deb
+        sudo dpkg -i liblua.deb
+        sudo dpkg -i liblua-dev.deb
         pkg-config --libs lua
     - name: Run tests
       run: swift test
