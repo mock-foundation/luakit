@@ -166,6 +166,8 @@ public class LuaState {
     /// A `__close` metamethod cannot yield when called through this function.
     ///
     /// (Exceptionally, this function was introduced in Lua release 5.4.3. It is not present in previous 5.4 releases.)
+    ///
+    /// **DOES NOT WORK ON LINUX**
     /// - Parameter index: Slot index that should be closed.
     public func closesSlot(at index: Int32) {
         lua_closeslot(L, index)
