@@ -33,11 +33,7 @@ jobs:
         sudo add-apt-repository 'deb http://no.archive.ubuntu.com/ubuntu/ impish universe'
         sudo apt update
         sudo apt install liblua5.4-dev
-        curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
-        tar zxf lua-5.4.4.tar.gz
-        cd lua-5.4.4
-        sudo make linux install
-        sudo make test
+        brew install lua
         pkg-config --libs lua
     - name: Build
       run: swift build
@@ -50,11 +46,7 @@ jobs:
         sudo add-apt-repository 'deb http://no.archive.ubuntu.com/ubuntu/ impish universe'
         sudo apt update
         sudo apt install liblua5.4-dev
-        curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
-        tar zxf lua-5.4.4.tar.gz
-        cd lua-5.4.4
-        sudo make linux install
-        sudo make test
+        brew install lua
         pkg-config --libs lua
     - name: Run tests
       run: swift test
