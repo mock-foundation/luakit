@@ -6,6 +6,6 @@ module liblua_macOS [system] {
 
 module liblua_linux [system] {
     header "liblua.h"
-    link "lua5.4"
+    link "lua54"
     export *
 }
