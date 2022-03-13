@@ -28,25 +28,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Build and install lua
+    - name: Install lua
       run: |
-        curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
-        tar zxf lua-5.4.4.tar.gz
-        cd lua-5.4.4
-        sudo make linux install
-        sudo make test
+        brew install lua
     - name: Build
       run: swift build
   test-ubuntu:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Build and install lua
+    - name: Install lua
       run: |
-        curl -R -O http://www.lua.org/ftp/lua-5.4.4.tar.gz
-        tar zxf lua-5.4.4.tar.gz
-        cd lua-5.4.4
-        sudo make linux install
-        sudo make test
+        brew install lua
     - name: Run tests
       run: swift test
