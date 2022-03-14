@@ -33,7 +33,9 @@ jobs:
     - name: Install lua
       run: conan install .
     - name: Build
-      run: swift build
+      run: |
+        export PKG_CONFIG_PATH=$PWD
+        swift build
   test-ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -43,4 +45,6 @@ jobs:
     - name: Install lua
       run: conan install .
     - name: Run tests
-      run: swift test
+      run: |
+        export PKG_CONFIG_PATH=$PWD
+        swift test
