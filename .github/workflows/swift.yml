@@ -33,7 +33,7 @@ jobs:
     - name: Install lua and generate .pc file
       run: conan install .
     - name: Set up pkg-config
-      run: export PKG_CONFIG_PATH="$PWD:$PKG_CONFIG_PATH"
+      run: export PKG_CONFIG_PATH=$PWD:$PKG_CONFIG_PATH
     - name: Build
       run: swift build
   test-ubuntu:
@@ -45,6 +45,6 @@ jobs:
     - name: Install lua and generate .pc file
       run: conan install .
     - name: Set up pkg-config
-      run: export PKG_CONFIG_PATH="$PWD:$PKG_CONFIG_PATH"
+      run: export PKG_CONFIG_PATH=$PWD:$PKG_CONFIG_PATH
     - name: Run tests
       run: swift test
