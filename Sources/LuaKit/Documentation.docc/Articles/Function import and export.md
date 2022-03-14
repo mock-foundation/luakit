@@ -21,7 +21,7 @@ func operateOnData(_ data: String) {
 ```
 
 ...and we have a task to export it to Lua. We have a function to do so,
-namely ``Lua/registerFunction(_:name:)``, but it expects some kind of
+namely ``Lua/register(function:name:)``, but it expects some kind of
 `lua_CFunction` 🤨.
 
 This looks strange, but in reality everything is pretty easy. Basically,

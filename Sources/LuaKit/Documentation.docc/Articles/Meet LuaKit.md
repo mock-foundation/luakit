@@ -69,7 +69,7 @@ wrong.
 Yea, you have heard that right - we are going to run some Swift code. But we will be
 doing that **in Lua** 😎
 
-There is a function called ``Lua/registerFunction(_:name:)``, which does just that.
+There is a function called ``Lua/register(function:name:)``, which does just that.
 But there is a catch. It expects a function that looks something like this:
 
 ```swift

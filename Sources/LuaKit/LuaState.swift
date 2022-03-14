@@ -104,7 +104,7 @@ public class LuaState {
         
         print(result)
         if result != 0 {
-            throw LuaError(rawValue: Int(result))!
+            throw LuaError(rawValue: result)!
         }
     }
     
@@ -292,56 +292,90 @@ have a difference against toInt, so use please toDouble
         lua_pushstring(L, string)
     }
     
+    /// Opens  base  standart library.
     public func openBase() {
         luaopen_base(L)
     }
     
+    /// Opens table standart library.
     public func openTable() {
         luaopen_table(L)
     }
     
+    /// Opens I/O standart library.
     public func openIO() {
         luaopen_io(L)
     }
     
+    /// Opens string standart library.
     public func openString() {
         luaopen_string(L)
     }
     
+    /// Opens mathematics standart library.
     public func openMath() {
         luaopen_math(L)
     }
     
+    /// Opens OS standart library.
     public func openOS() {
         luaopen_os(L)
     }
     
+    /// Opens  UTF-8 standart library.
     public func openUTF8() {
         luaopen_utf8(L)
     }
     
+    /// Opens  debug  standart library.
     public func openDebug() {
         luaopen_debug(L)
     }
     
+    /// Opens package standart library.
     public func openPackage() {
         luaopen_package(L)
     }
     
+    /// Opens coroutines standart library.
     public func openCoroutine() {
         luaopen_coroutine(L)
     }
-    
+    /// Opens all standart libraries.
     public func openLibs() {
         luaL_openlibs(L)
     }
     
-    public func loadBuffer(_ buffer: String, name: String) {
-        luakitL_loadbuffer(L, buffer, buffer.utf8.count, name)
+    public func loadBuffer(_ buffer: String, name: String) throws {
+        let result = luakitL_loadbuffer(L, buffer, buffer.utf8.count, name)
+        
+        if let error = LuaError(rawValue: result) {
+            throw error
+        }
     }
     
-    public func loadBuffer(_ buffer: String, size: Int, name: String) {
-        luakitL_loadbuffer(L, buffer, size, name)
+    public func loadBuffer(_ buffer: String, size: Int, name: String) throws {
+        let result = luakitL_loadbuffer(L, buffer, size, name)
+        
+        if let error = LuaError(rawValue: result) {
+            throw error
+        }
+    }
+    
+    public func loadBufferX(_ buffer: String, size: Int, name: String, mode: LoadMode) throws {
+        let result = luaL_loadbufferx(L, buffer, size, name, mode.rawValue)
+        
+        if let error = LuaError(rawValue: result) {
+            throw error
+        }
+    }
+    
+    public func loadBufferX(_ buffer: String, name: String, mode: LoadMode) throws {
+        let result = luaL_loadbufferx(L, buffer, buffer.utf8.count, name, mode.rawValue)
+        
+        if let error = LuaError(rawValue: result) {
+            throw error
+        }
     }
     
     deinit {

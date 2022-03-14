@@ -23,14 +23,14 @@ For documentation on usage of this class, refer to <doc:Meet-LuaKit>.
 
 ### Stack manipulation
 
-- ``pushToStack(_:)-veav``
-- ``pushToStack(_:)-7mnbm``
-- ``pushToStack(_:)-4ah0j``
 - ``pushToStack()``
+- ``pushToStack(bool:)``
+- ``pushToStack(double:)``
+- ``pushToStack(string:)``
 
 ### Function import/export
 
-- ``registerFunction(_:name:)``
+- ``register(function:name:)``
 - ``getArgAsDouble(args:index:)``
 - ``getArgAsString(args:index:)``
 

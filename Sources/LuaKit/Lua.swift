@@ -113,7 +113,7 @@ final public class Lua {
     ///   - code: Code to load.
     ///   - name: Name assigned to this exact piece of code.
     public func loadCode(_ code: String, name: String) throws {
-        lua.loadBuffer(code, name: name)
+        try lua.loadBuffer(code, name: name)
 //        guard result == 0 else {
 //            throw SyntaxError(message: getLastErrorMessageFromStack())
 //        }
