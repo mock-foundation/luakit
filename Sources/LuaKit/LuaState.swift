@@ -102,7 +102,6 @@ public class LuaState {
     public func protectedCall(argCount: Int32, resultCount: Int32 = 1, multipleResults: Bool = false, messageHandlerIndex: Int32 = 0) throws {
         let result = luakit_pcall(L, argCount, multipleResults ? LUA_MULTRET : resultCount, messageHandlerIndex)
         
-        print(result)
         if result != 0 {
             throw LuaError(rawValue: result)!
         }
@@ -166,13 +165,9 @@ public class LuaState {
     /// A `__close` metamethod cannot yield when called through this function.
     ///
     /// (Exceptionally, this function was introduced in Lua release 5.4.3. It is not present in previous 5.4 releases.)
-    ///
-    /// **DOES NOT WORK ON LINUX**
     /// - Parameter index: Slot index that should be closed.
     public func closesSlot(at index: Int32) {
-        #if !os(Linux)
         lua_closeslot(L, index)
-        #endif
     }
     
     /// Compares two Lua values. Returns `true` if the value at index `firstIndex` satisfies

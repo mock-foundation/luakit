@@ -104,7 +104,6 @@ final public class Lua {
     ///   - resultCount: Amount of results.
     func executeCode(argCount: Int32, resultCount: Int32) throws {
 //        luakit_pcall(lua.L, 0, 0, 0)
-        print("executing")
         try lua.protectedCall(argCount: argCount, resultCount: resultCount)
     }
     
@@ -114,9 +113,6 @@ final public class Lua {
     ///   - name: Name assigned to this exact piece of code.
     public func loadCode(_ code: String, name: String) throws {
         try lua.loadBuffer(code, name: name)
-//        guard result == 0 else {
-//            throw SyntaxError(message: getLastErrorMessageFromStack())
-//        }
     }
     
     /// Registers a function to be used in Lua. An equivalent of `lua_register`.

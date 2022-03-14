@@ -1,0 +1,5 @@
+[requires]
+lua/5.4.4@
+
+[generators]
+pkg_config

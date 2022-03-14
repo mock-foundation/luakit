@@ -28,25 +28,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install lua
-      run: |
-        curl -o liblua.deb http://ftp.de.debian.org/debian/pool/main/l/lua5.4/liblua5.4-0_5.4.4-1_amd64.deb
-        curl -o liblua-dev.deb http://ftp.de.debian.org/debian/pool/main/l/lua5.4/liblua5.4-dev_5.4.4-1_amd64.deb
-        sudo dpkg -i liblua.deb
-        sudo dpkg -i liblua-dev.deb
-        pkg-config --libs lua
+    - name: Install conan
+      run: pip install conan
+    - name: Install lua and generate .pc file
+      run: conan install .
+    - name: Set up pkg-config
+      run: export PKG_CONFIG_PATH="$PWD:$PKG_CONFIG_PATH"
     - name: Build
       run: swift build
   test-ubuntu:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install lua
-      run: |
-        curl -o liblua.deb http://ftp.de.debian.org/debian/pool/main/l/lua5.4/liblua5.4-0_5.4.4-1_amd64.deb
-        curl -o liblua-dev.deb http://ftp.de.debian.org/debian/pool/main/l/lua5.4/liblua5.4-dev_5.4.4-1_amd64.deb
-        sudo dpkg -i liblua.deb
-        sudo dpkg -i liblua-dev.deb
-        pkg-config --libs lua
+    - name: Install conan
+      run: pip install conan
+    - name: Install lua and generate .pc file
+      run: conan install .
+    - name: Set up pkg-config
+      run: export PKG_CONFIG_PATH="$PWD:$PKG_CONFIG_PATH"
     - name: Run tests
       run: swift test
