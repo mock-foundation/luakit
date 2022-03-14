@@ -30,10 +30,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install conan
       run: pip install conan
-    - name: Install lua and generate .pc file
-      run: conan install .
-    - name: Set up pkg-config
-      run: export PKG_CONFIG_PATH=$PWD:$PKG_CONFIG_PATH
+    - name: Install lua
+      run: |
+        conan install .
+        export PKG_CONFIG_PATH=$PWD
     - name: Build
       run: swift build
   test-ubuntu:
@@ -42,9 +42,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install conan
       run: pip install conan
-    - name: Install lua and generate .pc file
-      run: conan install .
-    - name: Set up pkg-config
-      run: export PKG_CONFIG_PATH=$PWD:$PKG_CONFIG_PATH
+    - name: Install lua
+      run: |
+        conan install .
+        export PKG_CONFIG_PATH=$PWD
     - name: Run tests
       run: swift test
