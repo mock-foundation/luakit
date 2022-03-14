@@ -31,9 +31,7 @@ jobs:
     - name: Install conan
       run: sudo pip install conan
     - name: Install lua
-      run: |
-        sudo conan install .
-        export PKG_CONFIG_PATH=$PWD
+      run: conan install .
     - name: Build
       run: swift build
   test-ubuntu:
@@ -43,8 +41,6 @@ jobs:
     - name: Install conan
       run: pip install conan
     - name: Install lua
-      run: |
-        sudo conan install .
-        export PKG_CONFIG_PATH=$PWD
+      run: conan install .
     - name: Run tests
       run: swift test
