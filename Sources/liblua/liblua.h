@@ -41,6 +41,8 @@ void luakit_register(lua_State *L, const char *name, lua_CFunction f) {
     lua_register(L, name, f);
 }
 
+
+
 void luakit_pushcfunction(lua_State *L, lua_CFunction f) {
     lua_pushcfunction(L, f);
 }
@@ -151,11 +153,12 @@ int luakitL_getmetatable(lua_State *L, const char *tname) {
     luaL_getmetatable(L, tname);
 }
 
-int luakitL_loadbuffer(lua_State *L,
-                     const char *buff,
-                     size_t sz,
-                     const char *name) {
+int luakitL_loadbuffer(lua_State *L, const char *buff, size_t sz, const char *name) {
     luaL_loadbuffer(L, buff, sz, name);
+}
+
+void luakitL_register(lua_State *L, const char *libname, const luaL_Reg *l) {
+    luaL_register(L, libname, l);
 }
 
 #endif /* liblua_h */

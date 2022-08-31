@@ -127,25 +127,25 @@ final public class Lua {
     // MARK: - Stack manipulation
     
     func getLastErrorMessageFromStack() -> String {
-        return lua.toString(index: -1) ?? "Unknown"
+        return lua.toString(from: -1) ?? "Unknown"
     }
     
     /// Pushes a `String` to the stack
     /// - Parameter string: A string to be pushed, nothin' strange here
     public func pushToStack(string: String) {
-        lua.push(string: string)
+        lua.pushString(string)
     }
     
     /// Pushes a `Double` value to the stack
     /// - Parameter double: A Double to pushed, nothing suprizing
     public func pushToStack(double: Double) {
-        lua.push(double: double)
+        lua.pushDouble(double)
     }
     
     /// Pushes a boolean value to the stack
     /// - Parameter bool: Well, a boolean to be pushed
     public func pushToStack(bool: Bool) {
-        lua.push(bool: bool)
+        lua.pushBool(bool)
     }
     
     /// Pushes a `nil` value to the stack, because, well, no arguments
@@ -155,7 +155,7 @@ final public class Lua {
     }
     
     public func getStringFromStack(at index: Int32) throws -> String? {
-        return lua.toString(index: index)
+        return lua.toString(from: index)
     }
     
     // MARK: - Static methods

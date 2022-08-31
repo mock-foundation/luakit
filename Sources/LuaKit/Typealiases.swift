@@ -14,3 +14,4 @@ import liblua_linux
 public typealias CFunction = lua_CFunction
 public typealias KContext = lua_KContext
 public typealias KFunction = lua_KFunction
+public typealias Reg = luaL_Reg

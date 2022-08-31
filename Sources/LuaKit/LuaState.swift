@@ -166,7 +166,7 @@ public class LuaState {
     ///
     /// (Exceptionally, this function was introduced in Lua release 5.4.3. It is not present in previous 5.4 releases.)
     /// - Parameter index: Slot index that should be closed.
-    public func closesSlot(at index: Int32) {
+    public func closeSlot(at index: Int32) {
         lua_closeslot(L, index)
     }
     
@@ -223,19 +223,19 @@ Using this function is alright, it represents the same one
 used in Lua C API, but with name toNumber it does not seem
 have a difference against toInt, so use please toDouble
 """, renamed: "toDouble")
-    public func toNumber(index: Int32) -> Double {
+    public func toNumber(from index: Int32) -> Double {
         return luakit_tonumber(L, index)
     }
     
-    public func toDouble(index: Int32) -> Double {
+    public func toDouble(from index: Int32) -> Double {
         return luakit_tonumber(L, index)
     }
     
-    public func toInt(index: Int32) -> Int64 {
+    public func toInt(from index: Int32) -> Int64 {
         return luakit_tointeger(L, index)
     }
     
-    public func toString(index: Int32) -> String? {
+    public func toString(from index: Int32) -> String? {
         if let luaString = luakit_tostring(L, index) {
             return String(cString: luaString)
         } else {
@@ -275,15 +275,15 @@ have a difference against toInt, so use please toDouble
         lua_pushnil(L)
     }
     
-    public func push(bool: Bool) {
+    public func pushBool(_ bool: Bool) {
         lua_pushboolean(L, bool ? 1 : 0)
     }
     
-    public func push(double: Double) {
+    public func pushDouble(_ double: Double) {
         lua_pushnumber(L, double)
     }
     
-    public func push(string: String) {
+    public func pushString(_ string: String) {
         lua_pushstring(L, string)
     }
     
