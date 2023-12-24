@@ -9,25 +9,25 @@ import liblua_linux
 /// A class that represents a Lua instance.
 final public class Lua {
     var lua: LuaState
-    
+
     // MARK: - Initializers
-    
-    /// Opens a Lua instance with provided standart libraries.
+
+    /// Opens a Lua instance with provided standard libraries.
     /// - Parameter libs: Libs to open with Lua.
-    public init(libs: [StandartLibrary]) {
+    public init(libs: [StandardLibrary]) {
         lua = LuaState()
         openStdLibs(libs)
     }
-    
-    /// Open a new Lua instance with no standart libraries.
+
+    /// Open a new Lua instance with no standard libraries.
     public init() {
         lua = LuaState()
     }
-    
-    /// Open a new Lua instance with a kit of standart
+
+    /// Open a new Lua instance with a kit of standard
     /// libraries (if instructed to using `includeStd` argument).
-    /// 
-    /// Here is a list of standart libraries that will be opened:
+    ///
+    /// Here is a list of standard libraries that will be opened:
     /// - Base
     /// - OS
     /// - I/O
@@ -38,31 +38,31 @@ final public class Lua {
     /// - Math
     /// - Debug
     /// - Package
-    /// - Parameter includeStd: Whether to include standart libraries
+    /// - Parameter includeStd: Whether to include standard libraries
     /// from the above list or not. If you specify false, then, well, just use
     /// ``init()``, it will be easier for you and everybody else 🤷
     public init(includeStd: Bool = false) {
         lua = LuaState()
-        
+
         if includeStd {
             lua.openLibs()
         }
     }
-    
-    
+
+
     // MARK: - Public methods
-    
-    /// Opens standart libraries specified in `libs` parameter.
+
+    /// Opens standard libraries specified in `libs` parameter.
     /// - Parameter libs: Libraries to load.
-    public func openStdLibs(_ libs: [StandartLibrary]) {
+    public func openStdLibs(_ libs: [StandardLibrary]) {
         for lib in libs {
             openStdLib(lib)
         }
     }
-    
-    /// Opens a standart library specified in `lib` parameter.
+
+    /// Opens a standard library specified in `lib` parameter.
     /// - Parameter lib: A library to load.
-    public func openStdLib(_ lib: StandartLibrary) {
+    public func openStdLib(_ lib: StandardLibrary) {
         switch lib {
             case .base:
                 lua.openBase()
@@ -86,9 +86,9 @@ final public class Lua {
                 lua.openCoroutine()
         }
     }
-    
+
     // MARK: - Code interactions
-    
+
     /// Runs code. Wow.
     /// - Parameters:
     ///   - code: Code to run.
@@ -97,7 +97,7 @@ final public class Lua {
         try loadCode(code, name: name)
         try executeCode(argCount: 0, resultCount: 0)
     }
-    
+
     /// Executes code specified in parameters.
     /// - Parameters:
     ///   - argCount: Amount of args that were pushed onto the stack.
@@ -106,7 +106,7 @@ final public class Lua {
 //        luakit_pcall(lua.L, 0, 0, 0)
         try lua.protectedCall(argCount: argCount, resultCount: resultCount)
     }
-    
+
     /// Loads code into memory.
     /// - Parameters:
     ///   - code: Code to load.
@@ -114,7 +114,7 @@ final public class Lua {
     public func loadCode(_ code: String, name: String) throws {
         try lua.loadBuffer(code, name: name)
     }
-    
+
     /// Registers a function to be used in Lua. An equivalent of `lua_register`.
     /// For more documentation look at <doc:Function-import-and-export> article.
     /// - Parameters:
@@ -123,44 +123,44 @@ final public class Lua {
     public func register(function: @escaping CFunction, name: String) {
         lua.register(name: name, function: function)
     }
-    
+
     // MARK: - Stack manipulation
-    
+
     func getLastErrorMessageFromStack() -> String {
         return lua.toString(from: -1) ?? "Unknown"
     }
-    
+
     /// Pushes a `String` to the stack
     /// - Parameter string: A string to be pushed, nothin' strange here
     public func pushToStack(string: String) {
         lua.pushString(string)
     }
-    
+
     /// Pushes a `Double` value to the stack
     /// - Parameter double: A Double to pushed, nothing suprizing
     public func pushToStack(double: Double) {
         lua.pushDouble(double)
     }
-    
+
     /// Pushes a boolean value to the stack
     /// - Parameter bool: Well, a boolean to be pushed
     public func pushToStack(bool: Bool) {
         lua.pushBool(bool)
     }
-    
+
     /// Pushes a `nil` value to the stack, because, well, no arguments
     /// were specified here.
     public func pushToStack() {
         lua.pushNil()
     }
-    
+
     public func getStringFromStack(at index: Int32) throws -> String? {
         return lua.toString(from: index)
     }
-    
+
     // MARK: - Static methods
-    
-    
+
+
     /// A helper function for functions that are exported into Lua. Returns a `Double` value from
     /// arguments passed to that function in case if it actually exists there.
     /// - Parameters:
@@ -171,7 +171,7 @@ final public class Lua {
     public static func getArgAsDouble(args: OpaquePointer, index: Int32) -> Double {
         return luaL_checknumber(args, index)
     }
-    
+
     /// A helper function for functions that are exported into Lua. Returns a `String` value from
     /// arguments passed to that function in case if it actually exists there.
     /// - Parameters:

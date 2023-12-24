@@ -6,7 +6,7 @@
 
 ## Topics
 
-### Opening standart libraries
+### Opening standard libraries
 
 - ``openBase()``
 - ``openTable()``

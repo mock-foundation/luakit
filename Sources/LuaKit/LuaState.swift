@@ -1,6 +1,6 @@
 //
 //  LuaState.swift
-//  
+//
 //
 //  Created by Егор Яковенко on 11.03.2022.
 //
@@ -15,11 +15,11 @@ public class LuaState {
     /// The `L` name was chosen because it is the same name used in
     /// Lua documentation examples.
     var L: OpaquePointer?
-    
+
     public init() {
         L = luaL_newstate()
     }
-    
+
     /// Converts the acceptable index into an equivalent absolute index (that is,
     /// one that does not depend on the stack size).
     /// - Parameter index: An index to convert
@@ -27,7 +27,7 @@ public class LuaState {
     public func absIndex(_ index: Int32) -> Int32 {
         return lua_absindex(L, index)
     }
-    
+
     /// Performs an arithmetic or bitwise operation over the two values (or one, in
     /// the case of negations) at the top of the stack, with the value on the top
     /// being the second operand, pops these values, and pushes the result of the
@@ -37,7 +37,7 @@ public class LuaState {
     public func arith(operation: ValueOperation) {
         lua_arith(L, operation.rawValue)
     }
-    
+
     @discardableResult
     /// Sets a new panic function and returns the old one.
     /// - Parameter function: New panic function
@@ -45,7 +45,7 @@ public class LuaState {
     public func atPanic(function: @escaping CFunction) -> CFunction {
         return lua_atpanic(L, function)
     }
-    
+
     /// Calls a function. Like regular Lua calls, lua_call respects the `__call`
     /// metamethod. So, here the word "function" means any callable
     /// value.
@@ -98,15 +98,15 @@ public class LuaState {
     public func call(argCount: Int32, resultCount: Int32 = 1, multipleResults: Bool = false) throws {
         luakit_call(L, argCount, multipleResults ? LUA_MULTRET : resultCount)
     }
-    
+
     public func protectedCall(argCount: Int32, resultCount: Int32 = 1, multipleResults: Bool = false, messageHandlerIndex: Int32 = 0) throws {
         let result = luakit_pcall(L, argCount, multipleResults ? LUA_MULTRET : resultCount, messageHandlerIndex)
-        
+
         if result != 0 {
             throw LuaError(rawValue: result)!
         }
     }
-    
+
     /// This function behaves exactly like ``LuaState/call(argCount:resultCount:multipleResults:)``,
     /// but allows the called function to yield (see [§4.5](https://www.lua.org/manual/5.4/manual.html#4.5))
     /// - Parameters:
@@ -130,7 +130,7 @@ public class LuaState {
             context,
             function)
     }
-    
+
     /// Ensures that the stack has space for at least `elementCount` extra elements,
     /// that is, that you can safely push up to n values into it. It returns `false` if it cannot
     /// fulfill the request, either because it would cause the stack to be greater than
@@ -143,7 +143,7 @@ public class LuaState {
     public func checkStack(elementCount: Int32) -> Bool {
         return lua_checkstack(L, elementCount) != 0
     }
-    
+
     /// Close all active to-be-closed variables in the main thread, release all objects in
     /// the given Lua state (calling the corresponding garbage-collection metamethods,
     /// if any), and frees all dynamic memory used by this state.
@@ -157,7 +157,7 @@ public class LuaState {
     public func close() {
         lua_close(L)
     }
-    
+
     /// Close the to-be-closed slot at the given index and set its value to nil. The index
     /// must be the last index previously marked to be closed (see `lua_toclose`
     /// TODO: Fill this up) that is still active (that is, not closed yet).
@@ -169,7 +169,7 @@ public class LuaState {
     public func closeSlot(at index: Int32) {
         lua_closeslot(L, index)
     }
-    
+
     /// Compares two Lua values. Returns `true` if the value at index `firstIndex` satisfies
     /// op when compared with the value at `secondIndex`, following the semantics
     /// of the corresponding Lua operator (that is, it may call metamethods). Otherwise
@@ -181,7 +181,7 @@ public class LuaState {
     public func compare(at firstIndex: Int32, with secondIndex: Int32, operation: ComparationOperation) -> Bool {
         return lua_compare(L, firstIndex, secondIndex, operation.rawValue) != 0
     }
-    
+
     /// Concatenates the `count` values at the top of the stack, pops them, and leaves
     /// the result on the top. If `count` is 1, the result is the single value on the stack
     /// (that is, the function does nothing); if n is 0, the result is the empty string.
@@ -191,7 +191,7 @@ public class LuaState {
     public func concat(count: Int32) {
         lua_concat(L, count)
     }
-    
+
     /// Copies the element at index `from` into the valid index `to`, replacing
     /// the value at that position. Values at other positions are not affected.
     /// - Parameters:
@@ -200,7 +200,7 @@ public class LuaState {
     public func copy(from: Int32, to: Int32) {
         lua_copy(L, from, to)
     }
-    
+
     /// Creates a new empty table and pushes it onto the stack. Parameter `sequenceCount`
     /// is a hint for how many elements the table will have as a sequence; parameter `otherCount`
     /// is a hint for how many other elements the table will have. Lua may use these hints to
@@ -213,11 +213,11 @@ public class LuaState {
     public func createTable(sequenceCount: Int32, otherCount: Int32) {
         lua_createtable(L, sequenceCount, otherCount)
     }
-    
+
     public func getExtraSpace() {
         luakit_getextraspace(L)
     }
-    
+
     @available(*, deprecated, message: """
 Using this function is alright, it represents the same one
 used in Lua C API, but with name toNumber it does not seem
@@ -226,15 +226,15 @@ have a difference against toInt, so use please toDouble
     public func toNumber(from index: Int32) -> Double {
         return luakit_tonumber(L, index)
     }
-    
+
     public func toDouble(from index: Int32) -> Double {
         return luakit_tonumber(L, index)
     }
-    
+
     public func toInt(from index: Int32) -> Int64 {
         return luakit_tointeger(L, index)
     }
-    
+
     public func toString(from index: Int32) -> String? {
         if let luaString = luakit_tostring(L, index) {
             return String(cString: luaString)
@@ -242,137 +242,137 @@ have a difference against toInt, so use please toDouble
             return nil
         }
     }
-    
+
     public func pop(at index: Int32) {
         luakit_pop(L, index)
     }
-    
+
     public func newTable() {
         luakit_newtable(L)
     }
-    
+
     public func register(name: String, function: @escaping CFunction) {
         luakit_register(L, name, function)
     }
-    
+
     public func pushCFunction(function: @escaping CFunction) {
         luakit_pushcfunction(L, function)
     }
-    
+
     public func isFunction(at index: Int32) -> Bool {
         return luakit_isfunction(L, index) != 0
     }
-    
+
     public func isTable(at index: Int32) -> Bool {
         return luakit_istable(L, index) != 0
     }
-    
+
     public func isLightUserData(at index: Int32) -> Bool {
         return luakit_islightuserdata(L, index) != 0
     }
-    
+
     public func pushNil() {
         lua_pushnil(L)
     }
-    
+
     public func pushBool(_ bool: Bool) {
         lua_pushboolean(L, bool ? 1 : 0)
     }
-    
+
     public func pushDouble(_ double: Double) {
         lua_pushnumber(L, double)
     }
-    
+
     public func pushString(_ string: String) {
         lua_pushstring(L, string)
     }
-    
-    /// Opens  base  standart library.
+
+    /// Opens  base  standard library.
     public func openBase() {
         luaopen_base(L)
     }
-    
-    /// Opens table standart library.
+
+    /// Opens table standard library.
     public func openTable() {
         luaopen_table(L)
     }
-    
-    /// Opens I/O standart library.
+
+    /// Opens I/O standard library.
     public func openIO() {
         luaopen_io(L)
     }
-    
-    /// Opens string standart library.
+
+    /// Opens string standard library.
     public func openString() {
         luaopen_string(L)
     }
-    
-    /// Opens mathematics standart library.
+
+    /// Opens mathematics standard library.
     public func openMath() {
         luaopen_math(L)
     }
-    
-    /// Opens OS standart library.
+
+    /// Opens OS standard library.
     public func openOS() {
         luaopen_os(L)
     }
-    
-    /// Opens  UTF-8 standart library.
+
+    /// Opens  UTF-8 standard library.
     public func openUTF8() {
         luaopen_utf8(L)
     }
-    
-    /// Opens  debug  standart library.
+
+    /// Opens  debug  standard library.
     public func openDebug() {
         luaopen_debug(L)
     }
-    
-    /// Opens package standart library.
+
+    /// Opens package standard library.
     public func openPackage() {
         luaopen_package(L)
     }
-    
-    /// Opens coroutines standart library.
+
+    /// Opens coroutines standard library.
     public func openCoroutine() {
         luaopen_coroutine(L)
     }
-    /// Opens all standart libraries.
+    /// Opens all standard libraries.
     public func openLibs() {
         luaL_openlibs(L)
     }
-    
+
     public func loadBuffer(_ buffer: String, name: String) throws {
         let result = luakitL_loadbuffer(L, buffer, buffer.utf8.count, name)
-        
+
         if let error = LuaError(rawValue: result) {
             throw error
         }
     }
-    
+
     public func loadBuffer(_ buffer: String, size: Int, name: String) throws {
         let result = luakitL_loadbuffer(L, buffer, size, name)
-        
+
         if let error = LuaError(rawValue: result) {
             throw error
         }
     }
-    
+
     public func loadBufferX(_ buffer: String, size: Int, name: String, mode: LoadMode) throws {
         let result = luaL_loadbufferx(L, buffer, size, name, mode.rawValue)
-        
+
         if let error = LuaError(rawValue: result) {
             throw error
         }
     }
-    
+
     public func loadBufferX(_ buffer: String, name: String, mode: LoadMode) throws {
         let result = luaL_loadbufferx(L, buffer, buffer.utf8.count, name, mode.rawValue)
-        
+
         if let error = LuaError(rawValue: result) {
             throw error
         }
     }
-    
+
     deinit {
         close()
     }

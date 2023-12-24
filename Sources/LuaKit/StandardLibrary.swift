@@ -1,12 +1,12 @@
 //
-//  StandartLibrary.swift
-//  
+//  StandardLibrary.swift
+//
 //
 //  Created by Егор Яковенко on 04.03.2022.
 //
 
 /// Lua libraries.
-public enum StandartLibrary: String {
+public enum StandardLibrary: String {
     case base
     case table
     case io
